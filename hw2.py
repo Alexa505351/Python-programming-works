@@ -1,12 +1,12 @@
 """Task 1"""
-'''def get_odd_numbers(n: int) -> list:
-    return list(range(1, n + 1, 2))
-if __name__ == "__main__":
-    n = int(input("Введите число: "))
-    
-    result = get_odd_numbers(n)
-    print(f"Список из нечётных чисел от одного до N: {result}")
+N = int(input("Введите число: "))
 
+odd_numbers = []
+
+for i in range(1, N + 1, 2):
+    odd_numbers.append(i)
+
+print("Список из нечётных чисел от одного до N:", odd_numbers)
 """Task 2"""
 def get_even_index_elements(names: list) -> list:
     result = []
@@ -85,15 +85,15 @@ def find_position(containers: list, new_weight: int) -> int:
 if __name__ == "__main__":
     n = int(input("Количество контейнеров: "))
     containers = []
+    
     for i in range(n):
-        weight = int(input(f"Введите вес контейнера {i+1}: "))
+        weight = int(input(f"Введите вес контейнера: "))
         containers.append(weight)
+    
     new_weight = int(input("\nВведите вес нового контейнера: "))
     position = find_position(containers, new_weight)
-    print(f"\nНомер, который получит новый контейнер: {position}")
     
-    print(f"Новый список видеокарт: {new_video_cards}")
-
+    print(f"\nНомер, который получит новый контейнер: {position}")
 
 
 """Task 6"""
@@ -127,7 +127,7 @@ if __name__ == "__main__":
     else:
         original = []
     result = rotate_right(original, k)
-    print(f"Сдвинутый список: {result}")'''
+    print(f"Сдвинутый список: {result}")
 
 """Task 7"""
 
