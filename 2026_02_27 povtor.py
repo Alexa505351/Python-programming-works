@@ -1,35 +1,23 @@
 import functools
-import sys
 
-def retry(count=5):
+def retry(count):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            last_exception = None
-            
-            for attempt in range(1, count + 1):
+            for attempt in range(count):
                 try:
-                    result = func(*args, **kwargs)
-                    return result
-                except ValueError as e:
-                    last_exception = e
-                    if attempt < count:
-                        continue
-                    else:
-                        raise
-                except OSError as e:
-                    print(f"{func.__name__} raise OsError exception.",
-                          file=sys.stdout)
-                    last_exception = e
-                    if attempt < count:
-                        continue
-                    else:
-                        raise
-                except Exception as e:
-                    raise
-            
-            if last_exception:
-                raise last_exception
-        
+                    return func(*args, **kwargs)
+                except ValueError:
+                    continue
+                except OSError:
+                    print(f"{func.__name__} raise OsError exception.")
+                    continue
+            # Если все попытки исчерпаны — последняя попытка тоже с обработкой
+            try:
+                return func(*args, **kwargs)
+            except ValueError:
+                pass
+            except OSError:
+                print(f"{func.__name__} raise OsError exception.")
         return wrapper
     return decorator
