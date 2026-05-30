@@ -5,10 +5,9 @@ import platform
 os_name = platform.system()
 python_version = sys.version
 
-with open("os_info.txt", "w", encoding="utf-8") as f:
-    f.write(f"Информация об ОС: {os_name}. Версия Python: {python_version}")
-
-print(f"Информация об ОС: {os_name}. Версия Python: {python_version}")
+file = open("os_info.txt", "w")
+file.write(f"OS info is {os_name} Python version is {python_version}")
+file.close()
 
 """Task 2"""
 def sum_of_digits(n: int) -> int:
