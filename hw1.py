@@ -40,19 +40,9 @@ if __name__ == "__main__":
     
 """Task 3"""
 
-def find_minimal_divisor(n: int) -> int:
-    for divisor in range(2, int(n ** 0.5) + 1):
-        if n % divisor == 0:
-            return divisor
-    return n
+n = int(input("Введите число: "))
 
-if __name__ == "__main__":
-    n = int(input("Введите число: "))
-    
-    if n <= 1:
-        print("Число должно быть больше 1")
-    else:
-        minimal_divisor = find_minimal_divisor(n)
-        print(f"Наименьший делитель, отличный от единицы: {minimal_divisor}")
-    print(f"Разность суммы и количества цифр: {sum_digits - count_digits}")
-
+for divisor in range(2, n + 1):
+    if n % divisor == 0:
+        print("Наименьший делитель, отличный от единицы:", divisor)
+        break
