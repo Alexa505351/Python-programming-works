@@ -1,236 +1,134 @@
-class Queue:
-    """Очередь - FIFO (First In, First Out)"""
-    
-    def __init__(self):
-        self._items = []
-    
-    def Put(self, item):
-        self._items.append(item)
-        print(f"  В очередь добавлен: {item}")
-    
-    def Get(self):
-        if not self._items:
-            print("  Очередь пуста!")
-            return None
-        item = self._items.pop(0)
-        print(f"  Из очереде извлечён: {item}")
-        return item
-    
-    def is_empty(self):
-        return len(self._items) == 0
-    
-    def size(self):
-        return len(self._items)
-    
-    def show(self):
-        print(f"  Очередь (FIFO): {self._items}")
-        return self._items
 
-class Stack:
-    """Стек - FILO (First In, Last Out)"""
-    
-    def __init__(self):
-        self._items = []
-    
-    def Push(self, item):
-        self._items.append(item)
-        print(f"  В стек добавлен: {item}")
-    
-    def Pull(self):
-        if not self._items:
-            print("  Стек пуст!")
-            return None
-        item = self._items.pop()
-        print(f"  Из стека извлечён: {item}")
-        return item
-    
-    def is_empty(self):
-        return len(self._items) == 0
-    
-    def size(self):
-        return len(self._items)
-    
-    def show(self):
-        print(f"  Стек (FILO): {self._items}")
-        return self._items
+def create_node(data):
+    return {"data": data, "next": None}
 
-class Deque:
+#ОЧЕРЕДЬ Queue - FIFO
+queue_front = None
+queue_rear = None
+
+def queue_put(item):
+    global queue_front, queue_rear
+    new_node = create_node(item)
+    if queue_rear is None:
+        queue_front = queue_rear = new_node
+    else:
+        queue_rear["next"] = new_node
+        queue_rear = new_node
+    print(f"  В очередь добавлен: {item}")
+
+def queue_get():
+    global queue_front, queue_rear
+    if queue_front is None:
+        print("  Очередь пуста!")
+        return None
+    item = queue_front["data"]
+    queue_front = queue_front["next"]
+    if queue_front is None:
+        queue_rear = None
+    print(f"  Из очереди извлечён: {item}")
+    return item
+
+def queue_show():
+    result = []
+    current = queue_front
+    while current is not None:
+        result.append(current["data"])
+        current = current["next"]
+    print(f"  Очередь (FIFO): {result}")
+    return result
+
+#Stack - FILO
+stack_top = None
+
+def stack_push(item):
+    global stack_top
+    new_node = create_node(item)
+    new_node["next"] = stack_top
+    stack_top = new_node
+    print(f"  В стек добавлен: {item}")
+
+def stack_pop():
+    global stack_top
+    if stack_top is None:
+        print("  Стек пуст!")
+        return None
+    item = stack_top["data"]
+    stack_top = stack_top["next"]
+    print(f"  Из стека извлечён: {item}")
+    return item
+
+def stack_show():
+    result = []
+    current = stack_top
+    while current is not None:
+        result.append(current["data"])
+        current = current["next"]
+    print(f"  Стек (FILO): {result}")
+    return result
+
+# Deque - двусторонняя очередь 
+deque_front = None
+deque_rear = None
+
+def deque_put(item):
+    global deque_front, deque_rear
+    new_node = create_node(item)
+    if deque_rear is None:
+        deque_front = deque_rear = new_node
+    else:
+        deque_rear["next"] = new_node
+        deque_rear = new_node
+    print(f"  В дек (конец) добавлен: {item}")
+
+def deque_rput(item):
+    global deque_front, deque_rear
+    new_node = create_node(item)
+    if deque_front is None:
+        deque_front = deque_rear = new_node
+    else:
+        new_node["next"] = deque_front
+        deque_front = new_node
+    print(f"  В дек (начало) добавлен: {item}")
+
+def deque_get():
+    global deque_front, deque_rear
+    if deque_front is None:
+        print("  Дек пуст!")
+        return None
+    item = deque_front["data"]
+    deque_front = deque_front["next"]
+    if deque_front is None:
+        deque_rear = None
+    print(f"  Из дека (начало) извлечён: {item}")
+    return item
+
+def deque_rget():
+    global deque_front, deque_rear
+    if deque_front is None:
+        print("  Дек пуст!")
+        return None
     
-    def __init__(self):
-        self._items = []
-    
-    def Put(self, item):
-        self._items.append(item)
-        print(f"  В дек (конец) добавлен: {item}")
-    
-    def RPut(self, item):
-        self._items.insert(0, item)
-        print(f"  В дек (начало) добавлен: {item}")
-    
-    def Get(self):
-        if not self._items:
-            print("  Дек пуст!")
-            return None
-        item = self._items.pop(0)
-        print(f"  Из дека (начало) извлечён: {item}")
-        return item
-    
-    def RGet(self):
-        if not self._items:
-            print("  Дек пуст!")
-            return None
-        item = self._items.pop()
+    if deque_front == deque_rear:
+        item = deque_front["data"]
+        deque_front = deque_rear = None
         print(f"  Из дека (конец) извлечён: {item}")
         return item
     
-    def is_empty(self):
-        return len(self._items) == 0
+    current = deque_front
+    while current["next"] != deque_rear:
+        current = current["next"]
     
-    def size(self):
-        return len(self._items)
-    
-    def show(self):
-        print(f"  Дек: {self._items}")
-        return self._items
+    item = deque_rear["data"]
+    deque_rear = current
+    deque_rear["next"] = None
+    print(f"  Из дека (конец) извлечён: {item}")
+    return item
 
-class ShopQueue:
-    """
-    Использует Queue (FIFO) для обслуживания покупателей
-    """
-    
-    def __init__(self, name="Магазин"):
-        self.name = name
-        self.queue = Queue()
-        self.served_customers = Stack()  
-        self.waiting_deque = Deque()    
-    
-    def add_customer(self, name):
-        print(f"\n[+] {name} встал(а) в очередь")
-        self.queue.Put(name)
-        self._show_last_node()
-    
-    def serve_customer(self):
-        print(f"\n[-] Обслуживание...")
-        customer = self.queue.Get()
-        if customer:
-            self.served_customers.Push(customer)
-            print(f" {customer} обслужен(а) и покинул(а) магазин")
-        self._show_last_node()
-    
-    def add_urgent_customer(self, name):
-        print(f"\n[!] СРОЧНО! {name} проходит без очереди!")
-        self.waiting_deque.RPut(name)
-        self._show_last_node()
-    
-    def _show_last_node(self):
-        if not self.queue.is
-
-
-mpty():
-            print(f"  Last NodeList: {self.queue._items[-1]}")
-        else:
-            print(f"  Last NodeList: None")
-    
-    def show_status(self):
-        print("\n" + "="*50)
-        print(f"  Магазин: {self.name}")
-        print("="*50)
-        print("  ТЕКУЩАЯ ОЧЕРЕДЬ (FIFO):")
-        self.queue.show()
-        print("\n  ИСТОРИЯ ОБСЛУЖЕННЫХ (FILO):")
-        self.served_customers.show()
-        print("\n  ОСОБЫЙ ДЕК:")
-        self.waiting_deque.show()
-        print("="*50)
-    
-    def run_simulation(self):
-        print("\n" + "="*50)
-        print("  СИМУЛЯЦИЯ РАБОТЫ МАГАЗИНА")
-        print("="*50)
-        
-        customers = ["Анна", "Борис", "Виктор", "Галина", "Дмитрий"]
-        for c in customers:
-            self.add_customer(c)
-        
-        print("\n" + "-"*50)
-        self.show_status()
-        
-        self.serve_customer()
-        self.serve_customer()
-        self.serve_customer()
-        
-        print("\n" + "-"*50)
-        print("\n[!] Экстренная ситуация: пришёл важный клиент!")
-        self.add_urgent_customer("ЕЛЕНА (VIP)")
-        
-        print("\n" + "-"*50)
-        self.show_status()
-        
-        self.serve_customer()
-        self.serve_customer()
-        self.serve_customer()
-        
-        print("\n" + "-"*50)
-        print("\n[ФИНАЛЬНЫЙ СТАТУС]")
-        self.show_status()
-        
-        print("\n" + "="*50)
-        print("  РАБОТА МАГАЗИНА ЗАВЕРШЕНА")
-        print("="*50)
-
-def demonstrate_structures():
-    """Демонстрация всех структур данных из файла"""
-    print("\n" + ""*60)
-    print("  ДЕМОНСТРАЦИЯ СТРУКТУР ДАННЫХ")
-    print(""*60)
-    
-    # QUEUE (FIFO) 
-    print("\n" + "─"*40)
-    print("1. ОЧЕРЕДЬ (Queue) - FIFO")
-    print("   Первый пришёл - первый ушёл")
-    print("─"*40)
-    q = Queue()
-    q.Put("Покупатель 1")
-    q.Put("Покупатель 2")
-    q.Put("Покупатель 3")
-    q.show()
-    q.Get()
-    q.Get()
-    q.show()
-    
-    # STACK (FILO)
-    print("\n" + "─"*40)
-    print("2. СТЕК (Stack) - FILO")
-    print("   Первый пришёл - последний ушёл")
-    print("─"*40)
-    s = Stack()
-    s.Push("Товар A")
-    s.Push("Товар B")
-    s.Push("Товар C")
-    s.show()
-    s.Pull()
-    s.Pull()
-    s.show()
-    
-    # DEQUE 
-    print("\n" + "─"*40)
-    print("3. ДЕК (Deque) - двусторонняя очередь")
-    print("   Put - в конец, RPut - в начало")
-    print("─"*40)
-    d = Deque()
-    d.Put("Обычный клиент")
-    d.RPut("VIP клиент")
-    d.Put("Ещё один клиент")
-    d.show()
-    d.Get() 
-    d.RGet()
-    d.show()
-
-if __name__ == "__main__":
-    demonstrate_structures()
-    
-    print("\n" + "═"*60)
-    print("  ОСНОВНАЯ СИМУЛЯЦИЯ: ОЧЕРЕДЬ В МАГАЗИНЕ")
-    print("═"*60)
-    shop = ShopQueue("Пятёрочка")
-    shop.run_simulation()_e
+def deque_show():
+    result = []
+    current = deque_front
+    while current is not None:
+        result.append(current["data"])
+        current = current["next"]
+    print(f"  Дек: {result}")
+    return result
