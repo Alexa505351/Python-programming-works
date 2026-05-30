@@ -12,12 +12,6 @@ def retry(count):
                 except OSError:
                     print(f"{func.__name__} raise OsError exception.")
                     continue
-            # Если все попытки исчерпаны — последняя попытка тоже с обработкой
-            try:
-                return func(*args, **kwargs)
-            except ValueError:
-                pass
-            except OSError:
-                print(f"{func.__name__} raise OsError exception.")
+            return func(*args, **kwargs)
         return wrapper
     return decorator
