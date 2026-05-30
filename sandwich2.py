@@ -1,8 +1,7 @@
-# Декораторы для добавления ингредиентов
 def bread(func):
     def wrapper():
         result = func()
-        return "Bread\n" + result + "Bread"
+        return "Bread\n" + result + "\nBread"
     return wrapper
 
 def salat(func):
@@ -23,13 +22,15 @@ def meat(func):
         return "Meat\n" + result
     return wrapper
 
-# Исходная функция, которая возвращает пустую строку
 @bread
 @meat
 @tomato
 @salat
 def make_sandwich():
-    return ""
+    return ''
 
-# Вывод результата
-print(make_sandwich())
+def main():
+    print(make_sandwich())
+
+if __name__ == '__main__':
+    main()
